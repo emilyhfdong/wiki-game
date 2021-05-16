@@ -85,7 +85,7 @@ export const Blah: React.FC<IBlahProps> = ({
             fontFamily: "Open Sans",
             fontSize: 10,
             position: "absolute",
-            bottom: 20,
+            bottom: ["52%", 20],
             left: 20,
           }}
         >
