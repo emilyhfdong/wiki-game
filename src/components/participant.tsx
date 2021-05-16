@@ -5,7 +5,6 @@ import { ClosedScreen } from "./closed"
 
 export const Participant: React.FC = () => {
   const ws = useRef<null | WebSocket>(null)
-  const [connectionId, setConnectionId] = useState("")
   const [currentArticles, setCurrentArticles] = useState<IArticlePair | null>(
     null
   )
@@ -20,10 +19,6 @@ export const Participant: React.FC = () => {
       console.log("message", message)
       const data = JSON.parse(message.data)
       switch (data.action) {
-        case "idsAssigned": {
-          setConnectionId(data.connectionId)
-          break
-        }
         case "articlesChanged": {
           setCurrentArticles(data.articles)
           break
@@ -39,11 +34,11 @@ export const Participant: React.FC = () => {
       }
     }
 
-    ws.current.onopen = (event) => {
+    ws.current.onopen = () => {
       console.log("connected")
       ws.current?.send(JSON.stringify({ action: "groupJoined", groupId }))
     }
-  }, [])
+  }, [groupId])
 
   if (groupNotFound) {
     return <ClosedScreen type="notFound" />

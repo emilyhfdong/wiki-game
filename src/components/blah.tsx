@@ -1,6 +1,6 @@
 import React from "react"
-import { IArticlePair, IArticle, COLOR_THEMES } from "./host"
-import { Box, Text, Image, Link } from "rebass"
+import { IArticlePair, COLOR_THEMES } from "./host"
+import { Box, Text, Link } from "rebass"
 import { useOnHardScroll } from "../hooks"
 
 interface IBlahProps {
@@ -16,7 +16,7 @@ export const Article: React.FC<{
   img?: string
   inverted?: boolean
   colorTheme: { primary: string; secondary: string }
-}> = ({ name, img, inverted, colorTheme }) => {
+}> = ({ name, inverted, colorTheme }) => {
   return (
     <Box
       sx={{
@@ -30,10 +30,6 @@ export const Article: React.FC<{
         transition: "background-color 400ms linear",
       }}
     >
-      {/* <Image
-      src={img}
-      sx={{ position: "absolute", height: "100%", width: "100%", opacity: 0.5 }}
-    /> */}
       <Text
         sx={{
           color: inverted ? colorTheme.secondary : colorTheme.primary,
