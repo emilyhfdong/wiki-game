@@ -88,7 +88,7 @@ export const Host: React.FC = () => {
           ),
         ])
       })
-  }, [colorThemeIndex, currentArticlesIndex])
+  }, [])
 
   useEffect(() => {
     if (currentArticles && groupId) {
