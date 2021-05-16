@@ -20,13 +20,13 @@ export const Article: React.FC<{
   return (
     <Box
       sx={{
-        height: "100%",
-        width: "50%",
+        height: ["50%", "100%"],
+        width: ["100%", "50%"],
         backgroundColor: inverted ? colorTheme.primary : colorTheme.secondary,
         display: "flex",
         padding: 20,
         flexDirection: "column",
-        justifyContent: inverted ? "flex-end" : "space-between",
+        justifyContent: inverted ? "flex-end" : "flex-start",
         transition: "background-color 400ms linear",
       }}
     >
@@ -36,7 +36,7 @@ export const Article: React.FC<{
           textAlign: inverted ? "right" : "left",
           width: "100%",
           fontFamily: "Bebas Neue",
-          fontSize: 70,
+          fontSize: [50, 50, 60, 70],
           transition: "background-color 400ms linear",
           transform: "scale(1, 1.2)",
         }}
@@ -72,6 +72,7 @@ export const Blah: React.FC<IBlahProps> = ({
         width: "100vw",
         display: "flex",
         position: "fixed",
+        flexDirection: ["column", "row"],
       }}
     >
       <Article colorTheme={colorTheme} {...currentArticles?.start} />
