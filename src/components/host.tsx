@@ -88,6 +88,7 @@ export const Host: React.FC = () => {
           ),
         ])
       })
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
