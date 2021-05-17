@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
-import { IArticlePair } from "./host"
-import { Blah } from "./blah"
-import { ClosedScreen } from "./closed"
+
+import { getRandomUsername } from "../utils"
+import { IArticlePair, IConnection } from "../types"
+import { Blah, ClosedScreen } from "../components"
 
 export const Participant: React.FC = () => {
   const ws = useRef<null | WebSocket>(null)
@@ -10,6 +11,8 @@ export const Participant: React.FC = () => {
   )
   const [groupNotFound, setGroupNotFound] = useState(false)
   const [groupDeleted, setGroupDeleted] = useState(false)
+  const [connections, setConnections] = useState<IConnection[]>([])
+  const [connectionId, setConnectionId] = useState("")
 
   const groupId = window.location.pathname.slice(1)
 
@@ -31,12 +34,26 @@ export const Participant: React.FC = () => {
           setGroupDeleted(true)
           break
         }
+        case "connectionsUpdated": {
+          setConnections(data.connections)
+          break
+        }
+        case "connectionIdSet": {
+          setConnectionId(data.connectionId)
+          break
+        }
       }
     }
 
     ws.current.onopen = () => {
       console.log("connected")
-      ws.current?.send(JSON.stringify({ action: "groupJoined", groupId }))
+      ws.current?.send(
+        JSON.stringify({
+          action: "groupJoined",
+          groupId,
+          username: getRandomUsername(),
+        })
+      )
     }
   }, [groupId])
 
@@ -51,6 +68,10 @@ export const Participant: React.FC = () => {
     <Blah
       currentArticles={currentArticles}
       colorTheme={currentArticles?.colorTheme}
+      connections={connections}
+      connectionId={connectionId}
+      setConnections={setConnections}
+      isHost={false}
     />
   )
 }

@@ -1,50 +1,21 @@
 import React from "react"
-import { IArticlePair, COLOR_THEMES } from "./host"
+import { COLOR_THEMES } from "../../utils"
 import { Box, Text, Link } from "rebass"
-import { useOnHardScroll } from "../hooks"
+import { useOnHardScroll } from "../../hooks"
+import { IArticlePair, IColorTheme, IConnection } from "../../types"
+import { Article } from "./article"
+import { UsernameAvatar } from "./username-avatar"
 
 interface IBlahProps {
   currentArticles: IArticlePair | null
   nextArticle?: () => void
   goBackArticle?: () => void
   shareLink?: string
-  colorTheme?: { primary: string; secondary: string }
-}
-
-export const Article: React.FC<{
-  name?: string
-  img?: string
-  inverted?: boolean
-  colorTheme: { primary: string; secondary: string }
-}> = ({ name, inverted, colorTheme }) => {
-  return (
-    <Box
-      sx={{
-        height: ["50%", "100%"],
-        width: ["100%", "50%"],
-        backgroundColor: inverted ? colorTheme.primary : colorTheme.secondary,
-        display: "flex",
-        padding: 20,
-        flexDirection: "column",
-        justifyContent: inverted ? "flex-end" : "flex-start",
-        transition: "background-color 400ms linear",
-      }}
-    >
-      <Text
-        sx={{
-          color: inverted ? colorTheme.secondary : colorTheme.primary,
-          textAlign: inverted ? "right" : "left",
-          width: "100%",
-          fontFamily: "Bebas Neue",
-          fontSize: [50, 50, 60, 70],
-          transition: "background-color 400ms linear",
-          transform: "scale(1, 1.2)",
-        }}
-      >
-        {name?.replaceAll("_", " ").toUpperCase()}
-      </Text>
-    </Box>
-  )
+  colorTheme?: IColorTheme
+  connections: IConnection[]
+  setConnections: (connections: IConnection[]) => void
+  connectionId: string
+  isHost: boolean
 }
 
 export const Blah: React.FC<IBlahProps> = ({
@@ -53,6 +24,10 @@ export const Blah: React.FC<IBlahProps> = ({
   nextArticle,
   colorTheme = COLOR_THEMES[0],
   goBackArticle,
+  connections,
+  connectionId,
+  setConnections,
+  isHost,
 }) => {
   useOnHardScroll({
     onHardScroll: (direction) => {
@@ -75,6 +50,35 @@ export const Blah: React.FC<IBlahProps> = ({
         flexDirection: ["column", "row"],
       }}
     >
+      <Box
+        sx={{
+          position: "absolute",
+          top: ["52%", 20],
+          right: 20,
+          display: "flex",
+        }}
+      >
+        {connections
+          .sort((a, b) => b.points - a.points)
+          .map((connection) => (
+            <UsernameAvatar
+              key={connection.connectionId}
+              connection={connection}
+              colorTheme={colorTheme}
+              isSelf={connection.connectionId === connectionId}
+              updateConnection={(updatedConnection) =>
+                setConnections(
+                  connections.map((c) => ({
+                    ...c,
+                    ...(c.connectionId === connection.connectionId &&
+                      updatedConnection),
+                  }))
+                )
+              }
+              isHost={isHost}
+            />
+          ))}
+      </Box>
       <Article colorTheme={colorTheme} {...currentArticles?.start} />
       <Article colorTheme={colorTheme} inverted {...currentArticles?.end} />
       {nextArticle && shareLink && (

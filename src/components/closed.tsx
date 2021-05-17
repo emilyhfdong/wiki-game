@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Text } from "rebass"
-import { COLOR_THEMES } from "./host"
+import { COLOR_THEMES } from "../utils"
 
 export const ClosedScreen: React.SFC<{
   type: "notFound" | "deleted" | "loading"

@@ -1,6 +1,5 @@
 import React from "react"
-import { Host } from "./components/host"
-import { Participant } from "./components/participant"
+import { Host, Participant } from "./pages"
 
 export const App: React.FC = () => {
   return window.location.pathname.slice(1) ? <Participant /> : <Host />
