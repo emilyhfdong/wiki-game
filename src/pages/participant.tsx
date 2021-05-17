@@ -70,7 +70,16 @@ export const Participant: React.FC = () => {
       colorTheme={currentArticles?.colorTheme}
       connections={connections}
       connectionId={connectionId}
-      setConnections={setConnections}
+      setConnections={(updatedConnections) => {
+        setConnections(updatedConnections)
+        ws.current?.send(
+          JSON.stringify({
+            action: "connectionsUpdated",
+            groupId,
+            connections: updatedConnections,
+          })
+        )
+      }}
       isHost={false}
     />
   )
