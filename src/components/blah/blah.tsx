@@ -43,7 +43,7 @@ export const Blah: React.FC<IBlahProps> = ({
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         width: "100vw",
         display: "flex",
         position: "fixed",

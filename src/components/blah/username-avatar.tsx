@@ -2,6 +2,7 @@ import React, { RefObject, useRef, useState } from "react"
 import { Box, Text } from "rebass"
 import { IColorTheme, IConnection } from "../../types"
 import { Input } from "@rebass/forms"
+import { getIsTouchDevice } from "../../hooks"
 
 export const UsernameAvatar: React.FC<{
   connection: IConnection
@@ -107,7 +108,7 @@ export const FullAvatarContent: React.FC<IFullAvatarContentProps> = ({
   const [editingUsername, setEditingUsername] = useState("")
 
   const finishEditing = () => {
-    if (editingUsername !== connection.username) {
+    if (editingUsername !== connection.username && editingUsername) {
       updateConnection({ username: editingUsername })
     }
     setEditingUsername("")
@@ -215,12 +216,15 @@ export const AvatarButton: React.FC<{
       alignItems: "center",
       textAlign: "center",
       cursor: "pointer",
-      ":hover": {
-        opacity: 0.8,
-      },
-      ":active": {
-        opacity: 0.6,
-      },
+
+      ...(!getIsTouchDevice() && {
+        ":active": {
+          opacity: 0.6,
+        },
+        ":hover": {
+          opacity: 0.8,
+        },
+      }),
     }}
   >
     <i className={iconClassName} />

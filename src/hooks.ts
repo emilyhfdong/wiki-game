@@ -14,7 +14,7 @@ interface IOnHardScrollPayload {
   onHardScroll: (direction: TDirection) => void
   getShouldFireEvent: (direction: TDirection) => boolean
 }
-function getIsTouchDevice() {
+export const getIsTouchDevice = () => {
   return (
     "ontouchstart" in window ||
     navigator.maxTouchPoints > 0 ||
