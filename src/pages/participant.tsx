@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 
 import { getRandomUsername } from "../utils"
 import { IArticlePair, IConnection } from "../types"
-import { Blah, ClosedScreen } from "../components"
+import { ArticlesScreen, ClosedScreen } from "../components"
 
 export const Participant: React.FC = () => {
   const ws = useRef<null | WebSocket>(null)
@@ -65,7 +65,7 @@ export const Participant: React.FC = () => {
   }
 
   return (
-    <Blah
+    <ArticlesScreen
       currentArticles={currentArticles}
       colorTheme={currentArticles?.colorTheme}
       connections={connections}

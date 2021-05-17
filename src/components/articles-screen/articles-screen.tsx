@@ -6,7 +6,7 @@ import { IArticlePair, IColorTheme, IConnection } from "../../types"
 import { Article } from "./article"
 import { UsernameAvatar } from "./username-avatar"
 
-interface IBlahProps {
+interface IArticlesScreenProps {
   currentArticles: IArticlePair | null
   nextArticle?: () => void
   goBackArticle?: () => void
@@ -18,7 +18,7 @@ interface IBlahProps {
   isHost: boolean
 }
 
-export const Blah: React.FC<IBlahProps> = ({
+export const ArticlesScreen: React.FC<IArticlesScreenProps> = ({
   shareLink,
   currentArticles,
   nextArticle,

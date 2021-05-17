@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import faker from "faker"
 import { COLOR_THEMES, getNextArticlePair, getRandomUsername } from "../utils"
 import { IArticlePair, IConnection } from "../types"
-import { Blah } from "../components"
+import { ArticlesScreen } from "../components"
 
 export const Host: React.FC = () => {
   const ws = useRef<null | WebSocket>(null)
@@ -84,7 +84,7 @@ export const Host: React.FC = () => {
   }, [currentArticles, isConnected, groupId])
 
   return (
-    <Blah
+    <ArticlesScreen
       shareLink={groupId ? window.location.href + groupId : ""}
       currentArticles={currentArticles}
       goBackArticle={() => {
