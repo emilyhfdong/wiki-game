@@ -72,4 +72,12 @@ export const functions: AWS["functions"] = {
       },
     ],
   },
+  createUser: {
+    handler: `src/functions/createUser.handler`,
+    events: [
+      {
+        http: { method: "POST", path: "/users" },
+      },
+    ],
+  },
 }

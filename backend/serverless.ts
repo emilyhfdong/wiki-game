@@ -24,6 +24,7 @@ const serverlessConfiguration: AWS = {
       ARTICLES_DATA_KEY: "articles.json",
       CONNECTIONS_TABLE_NAME: "${self:service.name}-connections",
       GROUPS_TABLE_NAME: "${self:service.name}-groups",
+      USERS_TABLE_NAME: "${self:service.name}-users",
       WS_ENDPOINT: {
         "Fn::Join": [
           "",
@@ -103,6 +104,25 @@ const serverlessConfiguration: AWS = {
             { AttributeName: "groupId", AttributeType: "S" },
           ],
           KeySchema: [{ AttributeName: "groupId", KeyType: "HASH" }],
+          SSESpecification: { SSEEnabled: true },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
+      UsersTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "${self:provider.environment.USERS_TABLE_NAME}",
+          AttributeDefinitions: [
+            { AttributeName: "pk", AttributeType: "S" },
+            { AttributeName: "sk", AttributeType: "S" },
+          ],
+          KeySchema: [
+            { AttributeName: "pk", KeyType: "HASH" },
+            { AttributeName: "sk", KeyType: "RANGE" },
+          ],
           SSESpecification: { SSEEnabled: true },
           ProvisionedThroughput: {
             ReadCapacityUnits: 1,
