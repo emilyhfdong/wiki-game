@@ -68,6 +68,16 @@ const serverlessConfiguration: AWS = {
         ],
         Resource: [{ "Fn::GetAtt": ["GroupsTable", "Arn"] }],
       },
+      {
+        Effect: "Allow",
+        Action: [
+          "dynamodb:DeleteItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:PutItem",
+        ],
+        Resource: [{ "Fn::GetAtt": ["UsersTable", "Arn"] }],
+      },
     ],
   },
 
