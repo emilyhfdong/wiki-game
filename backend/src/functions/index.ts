@@ -80,4 +80,12 @@ export const functions: AWS["functions"] = {
       },
     ],
   },
+  createRun: {
+    handler: `src/functions/createRun.handler`,
+    events: [
+      {
+        http: { method: "POST", path: "/users/{userId}/runs" },
+      },
+    ],
+  },
 }

@@ -1,6 +1,6 @@
 import { config } from "@libs/environment"
 import * as AWS from "aws-sdk"
-import { UserMetaDataItem } from "./types"
+import { UserMetaDataItem, UserRunItem } from "./types"
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
@@ -43,7 +43,28 @@ const putUser = async (
   return item
 }
 
+const createRun = async (
+  userId: string,
+  runFields: Omit<UserRunItem, "sk" | "pk">
+) => {
+  const item: UserRunItem = {
+    pk: userId,
+    sk: `run#${runFields.start.name}#${runFields.end.name}`,
+    ...runFields,
+  }
+
+  await dynamodb
+    .put({
+      TableName: config.usersTableName,
+      Item: item,
+    })
+    .promise()
+
+  return item
+}
+
 export const database = {
   getUser,
   putUser,
+  createRun,
 }
