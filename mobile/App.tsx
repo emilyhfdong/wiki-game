@@ -1,12 +1,12 @@
 import React from "react"
-import Navigation from "./navigation"
+import Navigation from "./core/navigation"
 import { Provider } from "react-redux"
-import { persistor, store } from "./redux/store"
 import { PersistGate } from "redux-persist/integration/react"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { useFonts, BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue"
 import { QueryClientProvider } from "react-query"
-import { queryClient } from "./query/client"
+import { queryClient } from "./core/query/client"
+import { persistor, store } from "./core/redux/store"
 
 export default function App() {
   const [fontsLoaded] = useFonts({ BebasNeue_400Regular })

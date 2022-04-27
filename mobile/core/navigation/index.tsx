@@ -1,15 +1,23 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as React from "react"
+import { HomeScreen } from "../../screens/Home"
+import { SignupScreen } from "../../screens/Signup"
+import { getRandomColorScheme } from "../../theme"
+import { ColorSchemeContext } from "../context/color-scheme"
 import { useAppSelector } from "../redux/hooks"
-import { HomeScreen } from "../screens/Home"
-import { SignupScreen } from "../screens/Signup"
 
 export default function Navigation() {
+  const [colorScheme, setColorScheme] = React.useState(getRandomColorScheme())
+
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <ColorSchemeContext.Provider value={colorScheme}>
+      <NavigationContainer
+        onStateChange={() => setColorScheme(getRandomColorScheme())}
+      >
+        <RootNavigator />
+      </NavigationContainer>
+    </ColorSchemeContext.Provider>
   )
 }
 

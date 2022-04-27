@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 import { View, Text, TextInput, TouchableOpacity } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 import { theme } from "../theme"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { useMutation } from "react-query"
 import { BackendService } from "../backend"
 import { useDispatch } from "react-redux"
-import { userActions } from "../redux/slices/user"
-import { RootStackScreenProps } from "../navigation/types"
+import { userActions } from "../core/redux/slices/user"
+import { RootStackScreenProps } from "../core/navigation/types"
+import { BaseScreen } from "../components/BaseScreen"
 
 export const SignupScreen: React.FC<RootStackScreenProps<"Signup">> = ({
   navigation,
@@ -24,14 +24,7 @@ export const SignupScreen: React.FC<RootStackScreenProps<"Signup">> = ({
     }
   )
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.red,
-        padding: 10,
-        paddingTop: 30,
-      }}
-    >
+    <BaseScreen backgroundColor={theme.colors.red}>
       <Text
         style={{
           fontWeight: "bold",
@@ -79,6 +72,6 @@ export const SignupScreen: React.FC<RootStackScreenProps<"Signup">> = ({
           />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </BaseScreen>
   )
 }

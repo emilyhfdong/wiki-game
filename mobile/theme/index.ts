@@ -10,3 +10,38 @@ export const theme = {
   },
   fontFamily: "BebasNeue_400Regular",
 }
+
+export interface ColorScheme {
+  primary: string
+  secondary: string
+}
+
+export const colorSchemes: ColorScheme[] = [
+  // {
+  //   primary: theme.colors.pink,
+  //   secondary: theme.colors.red,
+  // },
+  {
+    primary: theme.colors.red,
+    secondary: theme.colors.pink,
+  },
+  {
+    primary: theme.colors.black,
+    secondary: theme.colors.beige,
+  },
+  // {
+  //   primary: theme.colors.beige,
+  //   secondary: theme.colors.black,
+  // },
+  {
+    primary: theme.colors.darkGreen,
+    secondary: theme.colors.green,
+  },
+  // {
+  //   primary: theme.colors.green,
+  //   secondary: theme.colors.darkGreen,
+  // },
+]
+
+export const getRandomColorScheme = () =>
+  colorSchemes[Math.floor(Math.random() * colorSchemes.length)]
