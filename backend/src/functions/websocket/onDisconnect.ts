@@ -72,7 +72,6 @@ export const handler = async (
     const newConnections = group.Item.connections.filter(
       (c) => c.connectionId !== connectionId
     )
-    console.log("hii new connections", newConnections)
     await Promise.all([
       ...group.Item.connections.map(({ connectionId }) =>
         sendMessage(connectionId, {

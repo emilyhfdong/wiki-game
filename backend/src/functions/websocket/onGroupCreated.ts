@@ -15,7 +15,7 @@ export const handler = async (
   console.log("onGroupCreated: recieved route key:", routeKey)
   console.log("connectionId:", connectionId)
 
-  const { username, groupId, articles } = JSON.parse(event.body)
+  const { username, groupId, round } = JSON.parse(event.body)
 
   const connections = [{ connectionId, username, points: 0 }]
 
@@ -26,7 +26,7 @@ export const handler = async (
         Item: {
           groupId,
           connections,
-          articles,
+          round,
         },
       })
       .promise(),

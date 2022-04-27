@@ -31,12 +31,12 @@ export const functions: AWS["functions"] = {
       },
     ],
   },
-  onArticlesChanged: {
-    handler: `src/functions/websocket/onArticlesChanged.handler`,
+  onRoundChanged: {
+    handler: `src/functions/websocket/onRoundChanged.handler`,
     events: [
       {
         websocket: {
-          route: "articlesChanged",
+          route: "roundChanged",
         },
       },
     ],

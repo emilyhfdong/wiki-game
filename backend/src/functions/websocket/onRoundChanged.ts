@@ -12,11 +12,11 @@ export const handler = async (
   const {
     requestContext: { routeKey, connectionId },
   } = event
-  console.log("onArticlesChanged: recieved route key:", routeKey)
+  console.log("onRoundChanged: recieved route key:", routeKey)
   console.log("connectionId:", connectionId)
   console.log("body", event.body)
 
-  const { groupId, articles } = JSON.parse(event.body)
+  const { groupId, round } = JSON.parse(event.body)
 
   const group = await dynamodb
     .update({
@@ -24,7 +24,7 @@ export const handler = async (
       Key: { groupId },
       UpdateExpression: "set articles = :x",
       ExpressionAttributeValues: {
-        ":x": articles,
+        ":x": round,
       },
       ReturnValues: "ALL_NEW",
     })
@@ -33,9 +33,9 @@ export const handler = async (
   await Promise.all(
     group.Attributes.connections.map(({ connectionId }) =>
       sendMessage(connectionId, {
-        action: "articlesChanged",
+        action: "roundChanged",
         groupId,
-        articles,
+        round,
       })
     )
   )
