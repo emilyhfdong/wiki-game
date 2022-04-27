@@ -1,14 +1,16 @@
 import React, { useContext } from "react"
-import { SafeAreaView, View } from "react-native"
+import { SafeAreaView, StyleProp, View, ViewStyle } from "react-native"
 import { RH, RW } from "../utils/responsive"
 
 interface BaseScreenProps {
   backgroundColor: string
+  style?: ViewStyle
 }
 
 export const BaseScreen: React.FC<BaseScreenProps> = ({
   children,
   backgroundColor,
+  style,
 }) => {
   return (
     <SafeAreaView
@@ -22,6 +24,7 @@ export const BaseScreen: React.FC<BaseScreenProps> = ({
           flex: 1,
           paddingHorizontal: RW(5),
           paddingVertical: RH(5),
+          ...style,
         }}
       >
         {children}

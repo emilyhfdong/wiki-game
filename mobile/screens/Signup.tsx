@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux"
 import { userActions } from "../core/redux/slices/user"
 import { RootStackScreenProps } from "../core/navigation/types"
 import { BaseScreen } from "../components/BaseScreen"
+import { TitleText } from "../components/TitleText"
 
 export const SignupScreen: React.FC<RootStackScreenProps<"Signup">> = ({
   navigation,
@@ -25,18 +26,9 @@ export const SignupScreen: React.FC<RootStackScreenProps<"Signup">> = ({
   )
   return (
     <BaseScreen backgroundColor={theme.colors.red}>
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 80,
-          lineHeight: 80,
-          color: theme.colors.pink,
-          fontFamily: theme.fontFamily,
-          opacity: 0.8,
-        }}
-      >
+      <TitleText style={{ color: theme.colors.pink }}>
         WHAT'S YOUR NAME?
-      </Text>
+      </TitleText>
       <View
         style={{
           flexDirection: "row",

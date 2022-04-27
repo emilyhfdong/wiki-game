@@ -1,29 +1,22 @@
 import React, { useContext } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { BaseScreen } from "../components/BaseScreen"
+import { TitleText } from "../components/TitleText"
 import { ColorSchemeContext } from "../core/context/color-scheme"
+import { RootStackScreenProps } from "../core/navigation/types"
 import { useAppSelector } from "../core/redux/hooks"
 import { theme } from "../theme"
 import { RH, RW } from "../utils/responsive"
 
-export const HomeScreen: React.FC = () => {
+export const HomeScreen: React.FC<RootStackScreenProps<"SpeedRun">> = ({
+  navigation,
+}) => {
   const { primary, secondary } = useContext(ColorSchemeContext)
   const name = useAppSelector((state) => state.user.name)
 
   return (
     <BaseScreen backgroundColor={primary}>
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 80,
-          lineHeight: 80,
-          color: secondary,
-          fontFamily: theme.fontFamily,
-          opacity: 0.8,
-        }}
-      >
-        WELCOME, {name}
-      </Text>
+      <TitleText style={{ color: secondary }}>WELCOME, {name}</TitleText>
       <View
         style={{
           flexDirection: "row",
@@ -31,7 +24,10 @@ export const HomeScreen: React.FC = () => {
           justifyContent: "space-between",
         }}
       >
-        <HomeButton text="Speed run" />
+        <HomeButton
+          onPress={() => navigation.navigate("SpeedRun")}
+          text="Speed run"
+        />
         <HomeButton text="Race run" />
       </View>
       <View

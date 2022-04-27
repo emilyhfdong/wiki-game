@@ -42,6 +42,3 @@ export const colorSchemes: ColorScheme[] = [
   //   secondary: theme.colors.darkGreen,
   // },
 ]
-
-export const getRandomColorScheme = () =>
-  colorSchemes[Math.floor(Math.random() * colorSchemes.length)]
