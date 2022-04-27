@@ -10,6 +10,8 @@ export type RootStackParamList = {
   Home: undefined
   Signup: undefined
   SpeedRun: undefined
+  StartLobby: undefined
+  JoinLobby: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

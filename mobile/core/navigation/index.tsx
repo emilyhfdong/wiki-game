@@ -2,8 +2,10 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as React from "react"
 import { HomeScreen } from "../../screens/Home"
+import { JoinLobby } from "../../screens/JoinLobby"
 import { SignupScreen } from "../../screens/Signup"
 import { SpeedRunScreen } from "../../screens/SpeedRun"
+import { StartLobby } from "../../screens/StartLobby"
 import { colorSchemes } from "../../theme"
 import { ColorSchemeContext } from "../context/color-scheme"
 import { useAppSelector } from "../redux/hooks"
@@ -45,6 +47,16 @@ export const RootNavigator: React.FC = () => {
       <Stack.Screen
         name="SpeedRun"
         component={SpeedRunScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="StartLobby"
+        component={StartLobby}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="JoinLobby"
+        component={JoinLobby}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

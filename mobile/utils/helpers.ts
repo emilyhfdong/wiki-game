@@ -7,3 +7,10 @@ export const getArticleNameFromUrl = (url: string) =>
   url.split(WIKI_BASE_URL)[1]
 export const getReadableTextFromName = (name: string) =>
   name.replaceAll("_", " ")
+export const generateRandomId = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  return new Array(5)
+    .fill(0)
+    .map(() => letters[Math.floor(Math.random() * letters.length)])
+    .join("")
+}

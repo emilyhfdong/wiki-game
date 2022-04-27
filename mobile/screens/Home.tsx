@@ -1,18 +1,17 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useContext } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { BaseScreen } from "../components/BaseScreen"
 import { TitleText } from "../components/TitleText"
 import { ColorSchemeContext } from "../core/context/color-scheme"
-import { RootStackScreenProps } from "../core/navigation/types"
 import { useAppSelector } from "../core/redux/hooks"
 import { theme } from "../theme"
 import { RH, RW } from "../utils/responsive"
 
-export const HomeScreen: React.FC<RootStackScreenProps<"SpeedRun">> = ({
-  navigation,
-}) => {
+export const HomeScreen: React.FC = () => {
   const { primary, secondary } = useContext(ColorSchemeContext)
   const name = useAppSelector((state) => state.user.name)
+  const { navigate } = useNavigation()
 
   return (
     <BaseScreen backgroundColor={primary}>
@@ -24,10 +23,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<"SpeedRun">> = ({
           justifyContent: "space-between",
         }}
       >
-        <HomeButton
-          onPress={() => navigation.navigate("SpeedRun")}
-          text="Speed run"
-        />
+        <HomeButton onPress={() => navigate("SpeedRun")} text="Speed run" />
         <HomeButton text="Race run" />
       </View>
       <View
@@ -37,8 +33,11 @@ export const HomeScreen: React.FC<RootStackScreenProps<"SpeedRun">> = ({
           justifyContent: "space-between",
         }}
       >
-        <HomeButton text="Start a lobby" />
-        <HomeButton text="Join a lobby" />
+        <HomeButton
+          text="Start a lobby"
+          onPress={() => navigate("StartLobby")}
+        />
+        <HomeButton text="Join a lobby" onPress={() => navigate("JoinLobby")} />
       </View>
     </BaseScreen>
   )
