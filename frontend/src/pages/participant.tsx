@@ -22,8 +22,8 @@ export const Participant: React.FC = () => {
       console.log("message", message)
       const data = JSON.parse(message.data)
       switch (data.action) {
-        case "articlesChanged": {
-          setCurrentArticles(data.articles)
+        case "roundChanged": {
+          setCurrentArticles(data.round)
           break
         }
         case "groupNotFound": {

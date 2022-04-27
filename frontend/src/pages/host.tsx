@@ -75,9 +75,9 @@ export const Host: React.FC = () => {
     if (currentArticles && isConnected) {
       ws.current?.send(
         JSON.stringify({
-          action: "articlesChanged",
+          action: "roundChanged",
           groupId,
-          articles: currentArticles,
+          round: currentArticles,
         })
       )
     }
