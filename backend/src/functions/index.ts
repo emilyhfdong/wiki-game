@@ -61,6 +61,16 @@ export const functions: AWS["functions"] = {
       },
     ],
   },
+  healthCheck: {
+    handler: `src/functions/websocket/healthCheck.handler`,
+    events: [
+      {
+        websocket: {
+          route: "healthCheck",
+        },
+      },
+    ],
+  },
   getArticles: {
     handler: `src/functions/getArticles.handler`,
     events: [
