@@ -21,6 +21,7 @@ export const SignupScreen: React.FC = () => {
   )
   return (
     <SingleTextInputScreen
+      hasBackButton={false}
       value={name}
       setValue={setName}
       isLoading={isLoading}

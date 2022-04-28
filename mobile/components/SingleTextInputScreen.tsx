@@ -4,6 +4,7 @@ import { theme } from "../theme"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { BaseScreen } from "../components/BaseScreen"
 import { TitleText } from "../components/TitleText"
+import { Header } from "./Header"
 
 interface SingleTextInputScreenProps {
   value: string
@@ -11,6 +12,7 @@ interface SingleTextInputScreenProps {
   title: string
   onEnter: () => void
   isLoading?: boolean
+  hasBackButton?: boolean
 }
 
 export const SingleTextInputScreen: React.FC<SingleTextInputScreenProps> = ({
@@ -19,9 +21,14 @@ export const SingleTextInputScreen: React.FC<SingleTextInputScreenProps> = ({
   title,
   isLoading,
   onEnter,
+  hasBackButton = true,
 }) => {
   return (
-    <BaseScreen backgroundColor={theme.colors.red}>
+    <BaseScreen
+      backgroundColor={theme.colors.red}
+      style={hasBackButton ? { paddingVertical: 0 } : {}}
+    >
+      {hasBackButton && <Header />}
       <TitleText style={{ color: theme.colors.pink }}>{title}</TitleText>
       <View
         style={{

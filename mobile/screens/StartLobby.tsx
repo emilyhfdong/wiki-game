@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { ActivityIndicator, Text, View } from "react-native"
+import React, { useContext, useEffect } from "react"
+import { ActivityIndicator } from "react-native"
 import { useQuery } from "react-query"
+import { useDispatch } from "react-redux"
 import { BackendService } from "../backend"
 import { BaseScreen } from "../components/BaseScreen"
 import { Lobby } from "../components/Lobby"
-import { TitleText } from "../components/TitleText"
 import { ColorSchemeContext } from "../core/context/color-scheme"
 import { QueryKeys } from "../core/query/client"
 import { useAppSelector } from "../core/redux/hooks"
-import { theme } from "../theme"
-import { generateRandomId, getRandomItemfromArray } from "../utils/helpers"
-import { RH, RW } from "../utils/responsive"
+import { gameActions } from "../core/redux/slices/game"
+import { generateRandomId } from "../utils/helpers"
 
 export interface Connection {
   username: string
@@ -19,13 +18,17 @@ export interface Connection {
 }
 
 export const StartLobby: React.FC = () => {
-  const { primary, secondary } = useContext(ColorSchemeContext)
-  const [groupId] = useState(generateRandomId())
+  const { primary } = useContext(ColorSchemeContext)
+  const groupId = useAppSelector((state) => state.game.groupId)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(gameActions.setGroupId(generateRandomId()))
+  }, [])
 
   const { data } = useQuery(QueryKeys.ARTICLES, BackendService.getArticles)
 
-  if (data) {
-    return <Lobby articles={data} groupId={groupId} />
+  if (data && groupId) {
+    return <Lobby articles={data} />
   }
   return (
     <BaseScreen

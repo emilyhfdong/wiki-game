@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as React from "react"
 import { HomeScreen } from "../../screens/Home"
 import { JoinLobby } from "../../screens/JoinLobby"
+import { RoundRun } from "../../screens/RoundRun"
 import { SignupScreen } from "../../screens/Signup"
 import { SpeedRunScreen } from "../../screens/SpeedRun"
 import { StartLobby } from "../../screens/StartLobby"
@@ -57,6 +58,11 @@ export const RootNavigator: React.FC = () => {
       <Stack.Screen
         name="JoinLobby"
         component={JoinLobby}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RoundRun"
+        component={RoundRun}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

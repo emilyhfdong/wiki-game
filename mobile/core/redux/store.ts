@@ -3,9 +3,11 @@ import { persistStore, persistReducer } from "redux-persist"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import thunk from "redux-thunk"
 import { userSlice } from "./slices/user"
+import { gameSlice } from "./slices/game"
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  game: gameSlice.reducer,
 })
 
 const persistedRootReducer = persistReducer(

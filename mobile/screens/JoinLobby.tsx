@@ -1,21 +1,26 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import { Lobby } from "../components/Lobby"
 import { SingleTextInputScreen } from "../components/SingleTextInputScreen"
+import { useAppSelector } from "../core/redux/hooks"
+import { gameActions } from "../core/redux/slices/game"
 
 export const JoinLobby: React.FC = () => {
-  const [groupId, setGroupId] = useState("")
-  const [finalGroupId, setFinalGroupId] = useState("")
-
-  if (!finalGroupId) {
+  const [localGroupId, setLocalGroupId] = useState("")
+  const groupId = useAppSelector((state) => state.game.groupId)
+  const dispatch = useDispatch()
+  if (!groupId) {
     return (
       <SingleTextInputScreen
-        value={groupId}
-        setValue={setGroupId}
+        value={localGroupId}
+        setValue={setLocalGroupId}
         title="ENTER CODE"
-        onEnter={() => setFinalGroupId(groupId.toUpperCase())}
+        onEnter={() =>
+          dispatch(gameActions.setGroupId(localGroupId.toUpperCase()))
+        }
       />
     )
   }
 
-  return <Lobby groupId={finalGroupId} articles={null} />
+  return <Lobby articles={null} />
 }

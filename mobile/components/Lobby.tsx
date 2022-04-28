@@ -1,41 +1,44 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { Text, View } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import {
+  ActivityIndicator,
+  Alert,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
+import { useDispatch } from "react-redux"
 import { BaseScreen } from "../components/BaseScreen"
 import { TitleText } from "../components/TitleText"
 import { ColorSchemeContext } from "../core/context/color-scheme"
 import { useAppSelector } from "../core/redux/hooks"
+import { gameActions } from "../core/redux/slices/game"
 import { theme } from "../theme"
 import { getRandomItemfromArray } from "../utils/helpers"
 import { RH, RW } from "../utils/responsive"
-
-export interface Connection {
-  username: string
-  connectionId: string
-  points: number
-}
+import { Header } from "./Header"
+import { Run } from "./Run"
 
 interface LobbyProps {
-  groupId: string
   // only admin will have articles
   articles: { img: string; name: string }[] | null
 }
 
-export interface Run {
-  start: { name: string; img: string }
-  end: { name: string; img: string }
-  colorTheme: { primary: string; secondary: string }
-}
-
-export const Lobby: React.FC<LobbyProps> = ({ groupId, articles }) => {
-  const [connections, setConnections] = useState<Connection[]>([])
-  const [connectionId, setConnectionId] = useState("")
-  const [currentRun, setCurrentRun] = useState<Run | null>(null)
-  const [groupNotFound, setGroupNotFound] = useState(false)
-  const [groupDeleted, setGroupDeleted] = useState(false)
+export const Lobby: React.FC<LobbyProps> = ({ articles }) => {
+  const connections = useAppSelector((state) => state.game.connections)
+  const errorMessage = useAppSelector((state) => state.game.errorMessage)
+  const groupId = useAppSelector((state) => state.game.groupId)
   const name = useAppSelector((state) => state.user.name)
   const ws = useRef<null | WebSocket>(null)
   const { primary, secondary } = useContext(ColorSchemeContext)
-
+  const { navigate, goBack } = useNavigation()
+  const dispatch = useDispatch()
   useEffect(() => {
     ws.current = new WebSocket(
       "wss://g5feck705d.execute-api.us-east-1.amazonaws.com/dev"
@@ -45,25 +48,37 @@ export const Lobby: React.FC<LobbyProps> = ({ groupId, articles }) => {
       console.log("recieved message", data)
       switch (data.action) {
         case "connectionsUpdated": {
-          setConnections(data.connections)
+          dispatch(gameActions.setConnections(data.connections))
           break
         }
         case "connectionIdSet": {
-          setConnectionId(data.connectionId)
+          dispatch(gameActions.setConnectionId(data.connectionId))
           break
         }
-        case "articlesChanged": {
-          setCurrentRun(data.articles)
+        case "roundChanged": {
+          dispatch(gameActions.setRound(data.round))
+          if (!data.round) {
+            navigate(articles ? "StartLobby" : "JoinLobby")
+          } else if (data.round && !data.round.winner) {
+            navigate("RoundRun", {
+              sendMessage: (event: any) =>
+                ws.current?.send(JSON.stringify(event)),
+            })
+          }
           break
         }
         case "groupNotFound": {
-          setGroupNotFound(true)
+          navigate(articles ? "StartLobby" : "JoinLobby")
+          dispatch(gameActions.setErrorMessage("groupNotFound"))
           break
         }
         case "groupDeleted": {
-          setGroupDeleted(true)
+          navigate(articles ? "StartLobby" : "JoinLobby")
+          dispatch(gameActions.setErrorMessage("groupDeleted"))
           break
         }
+        default:
+          console.log("recieved unknown event")
       }
     }
 
@@ -75,11 +90,6 @@ export const Lobby: React.FC<LobbyProps> = ({ groupId, articles }) => {
             action: "groupCreated",
             username: name,
             groupId,
-            articles: {
-              start: getRandomItemfromArray(articles),
-              end: getRandomItemfromArray(articles),
-              colorTheme: { primary, secondary },
-            },
           })
         )
       } else {
@@ -93,37 +103,131 @@ export const Lobby: React.FC<LobbyProps> = ({ groupId, articles }) => {
       }
     }
 
-    ws.current.onclose = () => console.log("disconnected")
+    ws.current.onclose = () => {
+      console.log("disconnected")
+      navigate("Home")
+    }
   }, [])
 
-  return (
-    <BaseScreen backgroundColor={primary}>
-      <TitleText style={{ color: secondary, marginBottom: RH(3) }}>
-        {groupId}
-      </TitleText>
+  useEffect(() => {
+    const interval = setInterval(() => {
+      ws.current?.send(JSON.stringify({ action: "healthCheck" }))
+    }, 45 * 1000)
+    return () => clearInterval(interval)
+  }, [ws.current])
 
-      {connections.map((connection) => (
-        <View
-          key={connection.connectionId}
+  useEffect(() => {
+    return () => ws.current?.close()
+  }, [])
+
+  const getText = () => {
+    switch (errorMessage) {
+      case "groupDeleted":
+        return "Lobby ended"
+      case "groupNotFound":
+        return "404 Group not found"
+      default:
+        return groupId
+    }
+  }
+
+  return (
+    <BaseScreen
+      backgroundColor={primary}
+      style={{ paddingBottom: 0, paddingTop: 0 }}
+    >
+      <Header
+        onBackPress={() => {
+          if (connections.length > 1 && !errorMessage) {
+            Alert.alert("Are you sure you want to leave?", "", [
+              { text: "Cancel", style: "cancel" },
+              { text: "Yes", style: "destructive", onPress: goBack },
+            ])
+          } else {
+            goBack()
+          }
+        }}
+      />
+      <TitleText style={{ color: secondary }}>{getText()}</TitleText>
+      <View
+        style={{
+          flex: 1,
+          ...(!connections.length && { justifyContent: "center" }),
+        }}
+      >
+        {connections.length ? (
+          connections.map((connection) => (
+            <View
+              key={connection.connectionId}
+              style={{
+                backgroundColor: `${secondary}30`,
+                padding: RW(5),
+                borderRadius: 10,
+                justifyContent: "space-between",
+                marginBottom: RH(1.5),
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: theme.fontFamily,
+                  fontSize: 20,
+                  color: secondary,
+                }}
+              >
+                {connection.username}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: theme.fontFamily,
+                  fontSize: 20,
+                  color: secondary,
+                }}
+              >
+                {connection.points}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <ActivityIndicator color={secondary} />
+        )}
+      </View>
+      {articles && (
+        <TouchableOpacity
+          onPress={() =>
+            ws.current?.send(
+              JSON.stringify({
+                action: "roundChanged",
+                groupId,
+                round: {
+                  start: getRandomItemfromArray(articles),
+                  end: getRandomItemfromArray(articles),
+                },
+              })
+            )
+          }
+          disabled={connections.length < 2}
+          activeOpacity={0.6}
           style={{
-            backgroundColor: `${secondary}30`,
-            padding: RW(5),
+            backgroundColor: secondary,
             borderRadius: 10,
-            justifyContent: "center",
-            marginBottom: RH(1.5),
+            padding: RW(5),
+            alignItems: "center",
+            opacity: connections.length < 2 ? 0.8 : 1,
           }}
         >
           <Text
             style={{
               fontFamily: theme.fontFamily,
+              color: primary,
               fontSize: 20,
-              color: secondary,
             }}
           >
-            {connection.username}
+            Start round!
           </Text>
-        </View>
-      ))}
+        </TouchableOpacity>
+      )}
     </BaseScreen>
   )
 }

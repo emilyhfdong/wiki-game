@@ -1,4 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { RunProps } from "../../components/Run"
+import { DateTime } from "luxon"
 
 declare global {
   namespace ReactNavigation {
@@ -12,6 +14,7 @@ export type RootStackParamList = {
   SpeedRun: undefined
   StartLobby: undefined
   JoinLobby: undefined
+  RoundRun: { sendMessage: (event: any) => void }
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
