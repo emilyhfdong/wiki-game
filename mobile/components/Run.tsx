@@ -4,7 +4,6 @@ import { ColorSchemeContext } from "../core/context/color-scheme"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { View, Text } from "react-native"
 import { RH, RW } from "../utils/responsive"
-import { BackButton } from "./BackButton"
 import {
   getArticleUrl,
   getArticleNameFromUrl,
@@ -96,17 +95,17 @@ export const Run: React.FC<RunProps> = ({
       <WebView
         onLoadEnd={(event) => {
           //@ts-expect-error
-          if (event.nativeEvent.url && !event.nativeEvent.navigationType) {
-            const articleName = getArticleNameFromUrl(event.nativeEvent.url)
-            setPath([...path, articleName])
-            if (articleName === end) {
-              const now = DateTime.now()
-              setEndTime(now)
-              onCompleted({
-                path,
-                totalSeconds: startTime ? now.diff(startTime).seconds : 0,
-              })
-            }
+          const isRedirect = Boolean(event.nativeEvent.navigationType)
+          const articleName = getArticleNameFromUrl(event.nativeEvent.url)
+          const newPath = [...path, ...(isRedirect ? [] : [articleName])]
+          setPath(newPath)
+          if (articleName === end) {
+            const now = DateTime.now()
+            setEndTime(now)
+            onCompleted({
+              path: newPath,
+              totalSeconds: startTime ? now.diff(startTime).seconds : 0,
+            })
           }
         }}
         source={{ uri: getArticleUrl(start) }}
